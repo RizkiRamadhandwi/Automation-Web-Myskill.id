@@ -7,6 +7,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 # test navigation
+# positive case
 class TestNavigation():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -19,22 +20,18 @@ class TestNavigation():
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
     
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "E-learning"))
         ).click()
-    
 
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Bootcamp & Program"))
         ).click()
     
-        
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Mentoring"))
         ).click()
     
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Corporate Service"))
         ).click()
@@ -47,6 +44,60 @@ class TestNavigation():
 
 
 # test register
+# positive case
+class TestRegisterValid():
+    def setup_method(self, method):
+        self.driver = webdriver.Firefox()
+        self.vars = {}
+
+    def teardown_method(self, method):
+        self.driver.quit()
+    
+    def test_register_valid(self):
+        self.driver.get("https://myskill.id/")
+        self.driver.set_window_size(1200, 700)
+
+        masuk_link = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "Daftar"))
+        )
+        masuk_link.click()
+        time.sleep(5)
+
+        email_input = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, ":r0:"))
+        )
+        email_input.click()
+        # ganti akun kalau test ulang
+        email_input.send_keys("novijakarta04@gmail.com")
+        
+        password_input = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, ":r1:"))
+        )
+        password_input.click()
+        password_input.send_keys("Test1234")
+
+        confirm_password_input = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, ":r2:"))
+        )
+        confirm_password_input.click()
+        confirm_password_input.send_keys("Test1234")
+        
+        register_button = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.ID, ":r3:"))
+        )
+        register_button.click()
+        # ganti email baru kalau failed
+
+        success_message = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.ID, "notistack-snackbar"))
+        )
+
+        assert success_message.text == "Akun berhasil didaftarkan!"
+
+        self.driver.close()
+
+
+# negative case
 class TestRegisterInvalidNotField():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -58,15 +109,13 @@ class TestRegisterInvalidNotField():
     def test_register_invalid_not_field(self):
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
-
-        
+  
         masuk_link = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Daftar"))
         )
         masuk_link.click()
         time.sleep(5)
-    
-        
+           
         register_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r3:"))
         )
@@ -84,6 +133,8 @@ class TestRegisterInvalidNotField():
     
         self.driver.close()
 
+
+# negative case
 class TestRegisterInvalidEmail():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -95,43 +146,34 @@ class TestRegisterInvalidEmail():
     def test_register_invalid_email(self):
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
-
         
         masuk_link = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Daftar"))
         )
         masuk_link.click()
-    
-
         
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r0:"))
         )
         email_input.click()
         email_input.send_keys("admin@damn.com")
-
-    
-
      
         password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
         )
         password_input.click()
         password_input.send_keys("1231313")
-    
-
+        
         confirm_password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r2:"))
         )
         confirm_password_input.click()
-        confirm_password_input.send_keys("1231313")
-    
+        confirm_password_input.send_keys("1231313")   
 
         agree_checkbox = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".PrivateSwitchBase-input"))
         )
-        agree_checkbox.click()
-    
+        agree_checkbox.click()   
         
         register_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r3:"))
@@ -144,9 +186,10 @@ class TestRegisterInvalidEmail():
 
         assert error_message.text == "Email yang kamu masukkan tidak valid, pastikan kamu sudah memasukkan alamat email dengan benar dan tidak menggunakan email sementara."
     
-
         self.driver.close()
 
+
+# negative case
 class TestRegisterInvalidPasswordWeak():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -158,8 +201,7 @@ class TestRegisterInvalidPasswordWeak():
     def test_register_invalid_password_weak(self):
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
-
-        
+     
         masuk_link = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Daftar"))
         )
@@ -170,30 +212,24 @@ class TestRegisterInvalidPasswordWeak():
         )
         email_input.click()
         email_input.send_keys("rizki.test0@gmail.com")
-
     
-
-     
         password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
         )
         password_input.click()
         password_input.send_keys("Test")
     
-
         confirm_password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r2:"))
         )
         confirm_password_input.click()
-        confirm_password_input.send_keys("Test")
-    
+        confirm_password_input.send_keys("Test")  
 
         agree_checkbox = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".PrivateSwitchBase-input"))
         )
         agree_checkbox.click()
-    
-        
+           
         register_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r3:"))
         )
@@ -205,9 +241,10 @@ class TestRegisterInvalidPasswordWeak():
 
         assert error_message.text == "Password harus terdiri dari setidaknya 6 karakter"
     
-
         self.driver.close()
 
+
+# negative case
 class TestRegisterInvalidPasswordNotMatch():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -219,30 +256,23 @@ class TestRegisterInvalidPasswordNotMatch():
     def test_register_invalid_password_not_match(self):
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
-
-        
+    
         masuk_link = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Daftar"))
         )
         masuk_link.click()
-    
-
         
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r0:"))
         )
         email_input.click()
         email_input.send_keys("rizki.test0@gmail.com")
-
     
-
-     
         password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
         )
         password_input.click()
-        password_input.send_keys("Test12!@")
-    
+        password_input.send_keys("Test12!@") 
 
         confirm_password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r2:"))
@@ -250,12 +280,10 @@ class TestRegisterInvalidPasswordNotMatch():
         confirm_password_input.click()
         confirm_password_input.send_keys("Test1212")
     
-
         agree_checkbox = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, ".PrivateSwitchBase-input"))
         )
-        agree_checkbox.click()
-    
+        agree_checkbox.click()  
         
         register_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r3:"))
@@ -268,9 +296,10 @@ class TestRegisterInvalidPasswordNotMatch():
 
         assert error_message.text == "Konfirmasi password harus sama dengan password"
     
-
         self.driver.close()
 
+
+# negative case
 class TestRegisterInvalidExistingEmail():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -283,22 +312,16 @@ class TestRegisterInvalidExistingEmail():
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
 
-        
         masuk_link = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Daftar"))
         )
         masuk_link.click()
     
-
-        
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r0:"))
         )
         email_input.click()
         email_input.send_keys("rizki.test0@gmail.com")
-
-    
-
      
         password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
@@ -306,14 +329,12 @@ class TestRegisterInvalidExistingEmail():
         password_input.click()
         password_input.send_keys("Test1212")
     
-
         confirm_password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r2:"))
         )
         confirm_password_input.click()
         confirm_password_input.send_keys("Test1212")
     
-        
         register_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r3:"))
         )
@@ -328,55 +349,9 @@ class TestRegisterInvalidExistingEmail():
         self.driver.close()
 
 
+
 # test forgot password
-class TestForgotPasswordInvalidEmail():
-    def setup_method(self, method):
-        self.driver = webdriver.Firefox()
-        self.vars = {}
-
-    def teardown_method(self, method):
-        self.driver.quit()
-
-    def test_login_forgot_password_invalid_email(self):
-        self.driver.get("https://myskill.id/")
-        self.driver.set_window_size(1200, 700)
-
-        
-        masuk_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
-        )
-        masuk_link.click()
-
-        WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.LINK_TEXT, "Lupa password?"))
-        ).click()
-
-        
-        email_input = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.ID, ":r5:"))
-        )
-        email_input.click()
-        email_input.send_keys("admin@damn.com")
-        
-
-        
-        WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.ID, ":r6:"))
-        ).click()
-
-
-        error_message = WebDriverWait(self.driver, 10).until(
-            EC.visibility_of_element_located((By.CSS_SELECTOR, ".MuiAlert-root"))
-        )
-
-        assert error_message.text == "Email yang ada masukkan tidak terdaftar."
-
-        WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.LINK_TEXT, "Kembali"))
-        ).click()
-      
-        self.driver.close()
-
+# positive case
 class TestForgotPasswordValid():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -389,7 +364,6 @@ class TestForgotPasswordValid():
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
 
-        
         masuk_link = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
         )
@@ -399,19 +373,15 @@ class TestForgotPasswordValid():
             EC.element_to_be_clickable((By.LINK_TEXT, "Lupa password?"))
         ).click()
 
-        
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r5:"))
         )
         email_input.click()
         email_input.send_keys("rizki.test0@gmail.com")
         
-
-        
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r6:"))
         ).click()
-
 
         success_message = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, "notistack-snackbar"))
@@ -426,7 +396,99 @@ class TestForgotPasswordValid():
         self.driver.close()
 
 
+
+# negative case
+class TestForgotPasswordInvalidEmail():
+    def setup_method(self, method):
+        self.driver = webdriver.Firefox()
+        self.vars = {}
+
+    def teardown_method(self, method):
+        self.driver.quit()
+
+    def test_login_forgot_password_invalid_email(self):
+        self.driver.get("https://myskill.id/")
+        self.driver.set_window_size(1200, 700)
+
+        masuk_link = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
+        )
+        masuk_link.click()
+
+        WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "Lupa password?"))
+        ).click()
+        
+        email_input = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, ":r5:"))
+        )
+        email_input.click()
+        email_input.send_keys("admin@damn.com")
+        
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, ":r6:"))
+        ).click()
+
+        error_message = WebDriverWait(self.driver, 10).until(
+            EC.visibility_of_element_located((By.CSS_SELECTOR, ".MuiAlert-root"))
+        )
+
+        assert error_message.text == "Email yang ada masukkan tidak terdaftar."
+
+        WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "Kembali"))
+        ).click()
+      
+        self.driver.close()
+
+
 # test Login
+
+# positive case
+class TestLoginValid():
+    def setup_method(self, method):
+        self.driver = webdriver.Firefox()
+        self.vars = {}
+
+    def teardown_method(self, method):
+        self.driver.quit()
+
+    def test_login_valid(self):
+        self.driver.get("https://myskill.id/")
+        self.driver.set_window_size(1200, 700)
+ 
+        masuk_link = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
+        )
+        masuk_link.click()
+        
+        email_input = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, ":r0:"))
+        )
+        email_input.click()
+        email_input.send_keys("rizki.test0@gmail.com")
+        
+        password_input = WebDriverWait(self.driver, 10).until(
+            EC.presence_of_element_located((By.ID, ":r1:"))
+        )
+        password_input.click()
+        password_input.send_keys("Test1234")
+    
+        login_button = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.ID, ":r2:"))
+        )
+        login_button.click()
+
+        success_message = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.ID, "notistack-snackbar"))
+        )
+
+        assert success_message.text == "Login berhasil!"
+      
+        self.driver.close()
+
+
+# negative case
 class TestLoginInvalidNotField():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -439,7 +501,6 @@ class TestLoginInvalidNotField():
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
 
-        
         masuk_link = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
         )
@@ -460,10 +521,10 @@ class TestLoginInvalidNotField():
         )   
         assert error_message.text == "Password is required"
 
-    
-
         self.driver.close()        
 
+
+# negative case
 class TestLoginInvalidEmail():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -476,29 +537,23 @@ class TestLoginInvalidEmail():
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
 
-        
         masuk_link = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
         )
         masuk_link.click()
 
-        
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r0:"))
         )
         email_input.click()
         email_input.send_keys("admin@damn.com")
 
-    
-
-     
         password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
         )
         password_input.click()
         password_input.send_keys("1231313")
     
-        
         login_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r2:"))
         )
@@ -510,10 +565,10 @@ class TestLoginInvalidEmail():
 
         assert error_message.text == "Email yang ada masukkan tidak terdaftar."
 
-    
-
         self.driver.close()
 
+
+# negative case
 class TestLoginInvalidPassword():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -525,29 +580,23 @@ class TestLoginInvalidPassword():
     def test_login_invalid_password(self):
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
-
         
         masuk_link = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
         )
         masuk_link.click()
 
-        
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r0:"))
         )
         email_input.click()
         email_input.send_keys("rizki.test0@gmail.com")
-    
-
         
         password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
         )
         password_input.click()
         password_input.send_keys("Test1212")
-    
-
     
         login_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r2:"))
@@ -559,58 +608,6 @@ class TestLoginInvalidPassword():
         )
 
         assert error_message.text == "Password yang kamu masukkan tidak valid."
-
-    
-      
-        self.driver.close()
-
-class TestLoginValid():
-    def setup_method(self, method):
-        self.driver = webdriver.Firefox()
-        self.vars = {}
-
-    def teardown_method(self, method):
-        self.driver.quit()
-
-    def test_login_valid(self):
-        self.driver.get("https://myskill.id/")
-        self.driver.set_window_size(1200, 700)
-
-        
-        masuk_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
-        )
-        masuk_link.click()
-
-        
-        email_input = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.ID, ":r0:"))
-        )
-        email_input.click()
-        email_input.send_keys("rizki.test0@gmail.com")
-    
-
-        
-        password_input = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.ID, ":r1:"))
-        )
-        password_input.click()
-        password_input.send_keys("Test1234")
-    
-
-    
-        login_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.ID, ":r2:"))
-        )
-        login_button.click()
-
-        success_message = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.ID, "notistack-snackbar"))
-        )
-
-        assert success_message.text == "Login berhasil!"
-
-    
       
         self.driver.close()
 
@@ -627,14 +624,13 @@ class TestHomePageViewProgram():
     def test_elements_on_home_page(self):
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
-    
 
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiGrid-root:nth-child(1) > .MuiBox-root > .mui-style-goxg3h"))
         ).click()
     
-        
         self.driver.close()
+
 
 class TestHomePageViewStory():
     def setup_method(self, method):
@@ -648,13 +644,12 @@ class TestHomePageViewStory():
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
     
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Baca Cerita"))
         ).click()
-    
         
         self.driver.close()
+
 
 class TestHomePageViewMateriByInstructor():
     def setup_method(self, method):
@@ -667,14 +662,13 @@ class TestHomePageViewMateriByInstructor():
     def test_elements_on_home_page(self):
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
-    
 
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Lihat Materi"))
         ).click()
-    
         
         self.driver.close()
+
 
 class TestHomePageViewQuetion():
     def setup_method(self, method):
@@ -687,59 +681,49 @@ class TestHomePageViewQuetion():
     def test_elements_on_home_page(self):
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
-    
 
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiPaper-root:nth-child(1) .MuiAccordionSummary-content"))
         ).click()
     
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiPaper-root:nth-child(2) > .MuiButtonBase-root .MuiTypography-root"))
         ).click()
     
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiPaper-root:nth-child(3) > .MuiButtonBase-root .MuiTypography-root"))
         ).click()
     
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiPaper-root:nth-child(4) > .MuiButtonBase-root .MuiTypography-root"))
         ).click()
     
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiPaper-root:nth-child(5) > .MuiButtonBase-root .MuiTypography-root"))
-        ).click()
-    
+        ).click()  
 
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiPaper-root:nth-child(1) .MuiAccordionSummary-content"))
         ).click()
     
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiPaper-root:nth-child(2) > .MuiButtonBase-root .MuiTypography-root"))
         ).click()
     
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiPaper-root:nth-child(3) > .MuiButtonBase-root .MuiTypography-root"))
         ).click()
     
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiPaper-root:nth-child(4) > .MuiButtonBase-root .MuiTypography-root"))
         ).click()
     
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".Mui-expanded > .MuiTypography-root"))
         ).click()
-    
-        
+           
         self.driver.close()
+
 
 class TestHomePageCallWhatsApp():
     def setup_method(self, method):
@@ -779,29 +763,24 @@ class TestElerningPageStartSubcribe():
             EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
         )
         masuk_link.click()
-
-        
+    
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r0:"))
         )
         email_input.click()
         email_input.send_keys("rizki.test0@gmail.com")
-
         
         password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
         )
         password_input.click()
         password_input.send_keys("Test1234")
-
-    
+ 
         login_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r2:"))
         )
         login_button.click()
     
-
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "E-learning"))
         ).click()
@@ -820,24 +799,21 @@ class TestElerningPageStartSubcribe():
 
         assert message.text == "Berlangganan E-Learning"
         
-    
-
         self.driver.close()
+
+
 
 class TestElerningPageViewMateri():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
         self.vars = {}
-
-    
+        
     def teardown_method(self, method):
         self.driver.quit()
-
 
     def test_elements_on_elerning_page(self):
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
-
 
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "E-learning"))
@@ -862,8 +838,9 @@ class TestElerningPageViewMateri():
 
         assert message.text == "Quality Assurance Fundamental"
         
-
         self.driver.close()
+
+
 
 class TestElerningPageViewStoryMember():
     def setup_method(self, method):
@@ -887,6 +864,8 @@ class TestElerningPageViewStoryMember():
 
         self.driver.close()
 
+
+
 class TestElerningPageViewMateriByInstructor():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -908,6 +887,8 @@ class TestElerningPageViewMateriByInstructor():
         ).click()
 
         self.driver.close()
+
+
 
 class TestElerningPageViewPortofolioMember():
     def setup_method(self, method):
@@ -931,6 +912,8 @@ class TestElerningPageViewPortofolioMember():
 
         self.driver.close()
 
+
+
 class TestElerningPageCallWhatsApp():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -953,6 +936,8 @@ class TestElerningPageCallWhatsApp():
 
         self.driver.close()
 
+
+
 class TestElerningPageTrainingForCorporate():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -972,8 +957,7 @@ class TestElerningPageTrainingForCorporate():
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Hubungi Tim MySkill"))
         ).click()
-
-
+        
         self.driver.close()
 
 
@@ -982,11 +966,9 @@ class TestBootcampPageStartBootcamp():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
         self.vars = {}
-
     
     def teardown_method(self, method):
         self.driver.quit()
-
 
     def test_elements_on_bootcamp_page(self):
         self.driver.get("https://myskill.id/")
@@ -996,29 +978,24 @@ class TestBootcampPageStartBootcamp():
             EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
         )
         masuk_link.click()
-
         
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r0:"))
         )
         email_input.click()
         email_input.send_keys("rizki.test0@gmail.com")
-
-        
+  
         password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
         )
         password_input.click()
         password_input.send_keys("Test1234")
 
-    
         login_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r2:"))
         )
         login_button.click()
     
-
-
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Bootcamp & Program"))
         ).click()
@@ -1031,8 +1008,9 @@ class TestBootcampPageStartBootcamp():
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiGrid-root:nth-child(3) .MuiBox-root > .MuiBox-root > .MuiBox-root > .MuiBox-root"))
         ).click()
     
-
         self.driver.close()
+
+
 
 class TestBootcampPageViewStoryAlumnus():
     def setup_method(self, method):
@@ -1056,6 +1034,8 @@ class TestBootcampPageViewStoryAlumnus():
 
         self.driver.close()
 
+
+
 class TestBootcampPageCallWhatsApp():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -1078,6 +1058,8 @@ class TestBootcampPageCallWhatsApp():
 
         self.driver.close()
 
+
+
 class TestBootcampPageTrainingForCorporate():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -1097,9 +1079,9 @@ class TestBootcampPageTrainingForCorporate():
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Hubungi Tim MySkill"))
         ).click()
-
-
+        
         self.driver.close()
+
 
 
 #  test mentoring page
@@ -1121,27 +1103,23 @@ class TestMentoringPageStartRegister():
             EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
         )
         masuk_link.click()
-
-        
+     
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r0:"))
         )
         email_input.click()
         email_input.send_keys("rizki.test0@gmail.com")
-
-        
+     
         password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
         )
         password_input.click()
         password_input.send_keys("Test1234")
-
     
         login_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r2:"))
         )
         login_button.click()
-
 
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Mentoring"))
@@ -1160,10 +1138,10 @@ class TestMentoringPageStartRegister():
         )
 
         assert message.text == "Berlangganan Review CV"
-        
-    
 
         self.driver.close()
+
+
 
 class TestMentoringPageViewStoryTestimoni():
     def setup_method(self, method):
@@ -1186,6 +1164,8 @@ class TestMentoringPageViewStoryTestimoni():
         ).click()
 
         self.driver.close()
+
+
 
 class TestMentoringPageCallWhatsApp():
     def setup_method(self, method):
@@ -1210,21 +1190,19 @@ class TestMentoringPageCallWhatsApp():
         self.driver.close()
 
 
+
 # test corporate service page
 class TestCorporatePageStartConsultationCorporateTraning():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
         self.vars = {}
-
-    
+   
     def teardown_method(self, method):
         self.driver.quit()
-
 
     def test_elements_on_corporate_page(self):
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
-
 
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Corporate Service"))
@@ -1233,24 +1211,22 @@ class TestCorporatePageStartConsultationCorporateTraning():
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Corporate Training"))
         ).click()
-    
 
         self.driver.close()     
+
+
 
 class TestCorporatePageStartConsultationPerformace():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
         self.vars = {}
-
     
     def teardown_method(self, method):
         self.driver.quit()
 
-
     def test_elements_on_corporate_page(self):
         self.driver.get("https://myskill.id/")
         self.driver.set_window_size(1200, 700)
-
 
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.LINK_TEXT, "Corporate Service"))
@@ -1260,9 +1236,10 @@ class TestCorporatePageStartConsultationPerformace():
             EC.element_to_be_clickable((By.LINK_TEXT, "Performance Management Software"))
         ).click()
     
-
         self.driver.close()  
-        
+
+
+
 class TestCorporatePageCallWhatsApp():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -1285,6 +1262,7 @@ class TestCorporatePageCallWhatsApp():
 
         self.driver.close()
 
+
 class TestCorporatePageTrainingForCorporate():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -1303,11 +1281,10 @@ class TestCorporatePageTrainingForCorporate():
 
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, "div:nth-child(3) > .MuiGrid-root .MuiButtonBase-root"))
-        ).click()
-
-     
+        ).click() 
 
         self.driver.close()
+
 
 
 # test profile
@@ -1327,21 +1304,18 @@ class TestProfilePageNavigation():
             EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
         )
         masuk_link.click()
-
-        
+      
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r0:"))
         )
         email_input.click()
         email_input.send_keys("rizki.test0@gmail.com")
-
-        
+       
         password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
         )
         password_input.click()
         password_input.send_keys("Test1234")
-
     
         login_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r2:"))
@@ -1375,6 +1349,8 @@ class TestProfilePageNavigation():
     
         self.driver.close()
 
+
+
 class TestProfilePageCallWhatsApp():
     def setup_method(self, method):
         self.driver = webdriver.Firefox()
@@ -1391,28 +1367,24 @@ class TestProfilePageCallWhatsApp():
             EC.element_to_be_clickable((By.LINK_TEXT, "Masuk"))
         )
         masuk_link.click()
-
         
         email_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r0:"))
         )
         email_input.click()
         email_input.send_keys("rizki.test0@gmail.com")
-
-        
+     
         password_input = WebDriverWait(self.driver, 10).until(
             EC.presence_of_element_located((By.ID, ":r1:"))
         )
         password_input.click()
         password_input.send_keys("Test1234")
 
-    
         login_button = WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.ID, ":r2:"))
         )
         login_button.click()
         time.sleep(10)
-    
 
         WebDriverWait(self.driver, 10).until(
             EC.element_to_be_clickable((By.CSS_SELECTOR, ".MuiAvatar-root"))
@@ -1428,59 +1400,6 @@ class TestProfilePageCallWhatsApp():
 
         self.driver.close()
 
-
-
-class TestRegisterValid():
-    def setup_method(self, method):
-        self.driver = webdriver.Firefox()
-        self.vars = {}
-
-    def teardown_method(self, method):
-        self.driver.quit()
-    
-    def test_register_valid(self):
-        self.driver.get("https://myskill.id/")
-        self.driver.set_window_size(1200, 700)
-
-        masuk_link = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.LINK_TEXT, "Daftar"))
-        )
-        masuk_link.click()
-        time.sleep(5)
-
-        email_input = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.ID, ":r0:"))
-        )
-        email_input.click()
-        # ganti akun kalau test ulang
-        email_input.send_keys("novijakarta04@gmail.com")
-        
-        password_input = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.ID, ":r1:"))
-        )
-        password_input.click()
-        password_input.send_keys("Test1234")
-
-        confirm_password_input = WebDriverWait(self.driver, 10).until(
-            EC.presence_of_element_located((By.ID, ":r2:"))
-        )
-        confirm_password_input.click()
-        confirm_password_input.send_keys("Test1234")
-
-        
-        register_button = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.ID, ":r3:"))
-        )
-        register_button.click()
-        # ganti email baru kalau failed
-
-        success_message = WebDriverWait(self.driver, 10).until(
-            EC.element_to_be_clickable((By.ID, "notistack-snackbar"))
-        )
-
-        assert success_message.text == "Akun berhasil didaftarkan!"
-
-        self.driver.close()
 
 
 
